@@ -814,7 +814,7 @@ void got_packet(u_char *args, const struct pcap_pkthdr *pcap_header, const u_cha
 				fprintf(json_fd, "\"src_port\": %hu, ", ntohs(tcp->th_sport));
 				fprintf(json_fd, "\"dst_port\": %hu, ", ntohs(tcp->th_dport));
 			}
-			fprintf(log_fd, "\"timestamp\": \"%s\", ", printable_time);
+			fprintf(json_fd, "\"timestamp\": \"%s\", ", printable_time);
 			fprintf(json_fd, "\"record_tls_version\": \"0x%.04X\", ", fp_packet->record_tls_version);
 			fprintf(json_fd, "\"tls_version\": \"0x%.04X\", \"ciphersuite_length\": \"0x%.04X\", ",
 				fp_packet->tls_version, fp_packet->ciphersuite_length);
