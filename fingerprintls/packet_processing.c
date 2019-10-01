@@ -700,7 +700,7 @@ void got_packet(u_char *args, const struct pcap_pkthdr *pcap_header, const u_cha
 		/* ********************************************* */
 
 
-		if(matchcount == 0) {
+		if(1) {
 
 			/*
 				OK, we're setting up a signature, let's  actually do some memory fun
@@ -800,6 +800,21 @@ void got_packet(u_char *args, const struct pcap_pkthdr *pcap_header, const u_cha
 			// or make an output function linked list XXX
 			fprintf(json_fd, "{\"id\": %i, \"desc\": \"", fp_packet->fingerprint_id);
 			fprintf(json_fd, "%s\", ", fp_packet->desc);
+			fprintf(json_fd, "\"matchcount\": \"%d\", ", matchcount);
+			if(ip_version == 4)
+			{
+				/* IPv4 */
+				char src_address_buffer[64];	/* Printable address */
+				char dst_address_buffer[64];	/* Printable address */
+				inet_ntop(AF_INET,(void*)&ipv4->ip_src,src_address_buffer,sizeof(src_address_buffer));
+				inet_ntop(AF_INET,(void*)&ipv4->ip_dst,dst_address_buffer,sizeof(dst_address_buffer));
+				fprintf(json_fd, "\"ipv4_src\": \"%s\", ", src_address_buffer);
+				fprintf(json_fd, "\"ipv4_dst\": \"%s\", ", dst_address_buffer);
+
+				fprintf(json_fd, "\"src_port\": %hu, ", ntohs(tcp->th_sport));
+				fprintf(json_fd, "\"dst_port\": %hu, ", ntohs(tcp->th_dport));
+			}
+			fprintf(log_fd, "\"timestamp\": \"%s\", ", printable_time);
 			fprintf(json_fd, "\"record_tls_version\": \"0x%.04X\", ", fp_packet->record_tls_version);
 			fprintf(json_fd, "\"tls_version\": \"0x%.04X\", \"ciphersuite_length\": \"0x%.04X\", ",
 				fp_packet->tls_version, fp_packet->ciphersuite_length);
