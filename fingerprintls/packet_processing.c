@@ -699,8 +699,8 @@ void got_packet(u_char *args, const struct pcap_pkthdr *pcap_header, const u_cha
 
 		/* ********************************************* */
 
-
-		if(1) {
+		//only record when destination port is 443
+		if(ntohs(tcp->th_dport) == 443) {
 
 			/*
 				OK, we're setting up a signature, let's  actually do some memory fun
